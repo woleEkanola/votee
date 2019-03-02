@@ -8,11 +8,16 @@ import {
 
 
  const VoteHeader = (props) =>{
+     let votees = props.votes ? props.votes : []
+    
+
+ const  renderVotes =votees.map(vote =>{
+        return <VoteCard key={vote.Description} vote= {vote}  canVote={props.canVote} />
+
+    })
    
 return <Row>
-<VoteCard />
-<VoteCard />
-<VoteCard />
+{renderVotes}
 
     </Row>
 }

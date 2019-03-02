@@ -11,7 +11,7 @@ import {
   NavLink,
 Row } from 'reactstrap';
 
-import {auth} from '../firebase'
+import {auth, db} from '../firebase'
 
 import VoteHeader from '../components/VoteHeader'
 import Comment from '../components/Comment'
@@ -40,7 +40,18 @@ class Home extends Component {
 
     componentDidMount(){
       let that = this
+let votes = []
+      // fetch votes and comments from DB
 
+    db.collection("votes").get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+         votes.push( doc.data());
+         that.setState({votes})
+      });
+
+    
+  });
       this.auth.onAuthStateChanged(function(user) {
         if (user) {
           // User is signed in.
@@ -56,6 +67,10 @@ signOut = () =>{
 
   alert('ready to sign out')
   this.auth.signOut()
+}
+
+vote(){
+  
 }
 
   render() {
@@ -102,7 +117,7 @@ signOut = () =>{
         </Navbar>
         <Row> 
 
-          <VoteHeader />
+          <VoteHeader votes = {this.state.votes}  canVote={this.state.signedIn} />
 
         </Row>
         <Row>
